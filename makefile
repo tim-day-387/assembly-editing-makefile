@@ -1,14 +1,17 @@
-# Set CFLAGS to activate all warnings and enable debugger
-CFLAGS = -Wall -g
-
 # Default rule is to build the executable called hello
 all: hello
 
 # Rule for building the executable
-hello: hello.o
-	gcc $(CFLAGS) hello.o -o hello
+hello: exit.o print.o hello.o
+	ld exit.o print.o hello.o -o hello
 
 # Rules for building each object file
+exit.o: exit.s
+	as -o exit.o exit.s
+
+print.o: print.s
+	as -o print.o print.s
+
 hello.o: hello.s.edit
 	as -o hello.o hello.s.edit
 
@@ -25,5 +28,6 @@ hello.i: hello.c
 # Give command "make clean" to remove object files,
 #  executable, and documentation.
 clean:
-	rm *.o *.i *.s *.s.edit
+	rm *.o *.i *.s.edit
+	rm hello.s
 	rm hello
